@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+  quorumcrypt1:
+    container_name: quorumcrypt1
+    build: 
+      context: ..
+      network: host
+      dockerfile: Dockerfile
+    command: ./server --config-file conf/server_1.json --key-file conf/node1.keystore
+    volumes:
+      - ./tmp:/target/release/conf:Z
+    image: rust-threshold-library
+    ports:
+      - "27001:27000"
+      - "51000:51000"
+    restart: always
+    networks:
+      localnet:
+        ipv4_address: 192.167.20.2
+
+  quorumcrypt2:
+    container_name: quorumcrypt2
+    build:
+      context: ..
+      network: host
+      dockerfile: Dockerfile
+    volumes:
+      - ./tmp:/target/release/conf:Z      
+    command: ./server --config-file conf/server_2.json --key-file conf/node2.keystore
+    image: rust-threshold-library
+    ports:
+      - "27002:27000"
+      - "51001:51000"
+    restart: always
+    networks:
+      localnet:
+        ipv4_address: 192.167.20.3
+
+  quorumcrypt3:
+    container_name: quorumcrypt3
+    build:
+      context: ..
+      network: host
+      dockerfile: Dockerfile
+    volumes:
+      - ./tmp:/target/release/conf:Z
+    command: ./server --config-file conf/server_3.json --key-file conf/node3.keystore
+    image: rust-threshold-library
+    ports:
+      - "27003:27000"
+      - "51002:51000"
+    restart: always
+    networks:
+      localnet:
+        ipv4_address: 192.167.20.4
+
+  quorumcrypt4:
+    container_name: quorumcrypt4
+    build: 
+      context: ..
+      network: host
+      dockerfile: Dockerfile
+    volumes:
+      - ./tmp:/target/release/conf:Z
+    command: ./server --config-file conf/server_4.json --key-file conf/node4.keystore
+    image: rust-threshold-library
+    ports:
+      - "27004:27000"
+      - "51003:51000"
+    restart: always
+    networks:
+      localnet:
+        ipv4_address: 192.167.20.5
+
+networks:
+  localnet:
+    driver: bridge
+    name: threshold-net
+    ipam:
+      driver: default
+      config:
+        -
+          subnet: 192.167.0.0/16

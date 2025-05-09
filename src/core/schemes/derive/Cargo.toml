@@ -1,0 +1,13 @@
+[package]
+name = "quorum_derive"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+proc-macro = true
+name = "quorum_derive"
+path = "src/lib.rs"
+
+[dependencies]
+syn = "0.15.23"
+quote = "0.6.10"

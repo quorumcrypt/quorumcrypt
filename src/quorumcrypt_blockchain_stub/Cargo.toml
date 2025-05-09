@@ -1,0 +1,23 @@
+[package]
+name = "quorumcrypt_blockchain_stub"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+quorum_proto = {path = "../proto", version = "0.1.0"}
+
+tokio = { version = "1", features = ["full"] }
+tonic = "0.8"
+prost = "0.11"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+log = "0.4.17"
+log4rs = "1.1.1"
+env_logger = "0.9.1"
+clap = { version = "4.0.14", features = ["derive"] }
+
+[build-dependencies]
+tonic-build = "0.8"
+prost-build = "0.11.1"

@@ -1,0 +1,12 @@
+.vscode/*
+Cargo.lock
+*/target/*
+src/conf/*
+*.DS_Store
+src/proto/src/*.rs
+src/protocols/conf/*
+*/debug/*
+*/.rustc_info.json
+*/tmp/*
+src/start_network.sh
+src/log

@@ -1,0 +1,86 @@
+syntax = "proto3";
+package protocol_types;
+
+import "scheme_types.proto"; // Must be relative to the "includes" in build.rs
+
+// Convention: Use proto type 'bytes' (vec<u8> in Rust) for serialized data structures
+// and string (String in Rust) for the rest
+
+service ThresholdCryptoLibrary {
+    // returns one or more public keys matching the request
+    rpc get_public_keys (KeyRequest) returns (KeyResponse);
+
+    // starts a decryption protocol and returns the instance id
+    rpc decrypt (DecryptRequest) returns (DecryptResponse);
+    
+    // starts a signature protocol and returns the instance id
+    rpc sign(SignRequest) returns (SignResponse);
+
+    // starts a coin flip protocol and returns the instance id
+    rpc flip_coin (CoinRequest) returns (CoinResponse);
+
+    // returns the status (and if finished, the result) of a protocol instance
+    rpc get_status (StatusRequest) returns (StatusResponse);
+}
+
+// ---------- Keys ----------
+message KeyRequest {
+}
+
+message KeyResponse {
+    repeated scheme_types.PublicKeyEntry keys = 1;
+}
+
+
+// ---------- Ciphers ----------
+message DecryptRequest {
+    bytes ciphertext = 1;
+    optional string key_id = 2;
+    bool sync = 3; 
+}
+
+message DecryptResponse {
+    string instance_id = 1;
+    optional bytes result = 2;
+}
+
+//------------ Signatures ---------------
+message SignRequest {
+    bytes message = 1;
+    bytes label = 2;
+    optional string key_id = 3;
+    scheme_types.ThresholdScheme scheme = 4;
+    scheme_types.Group group = 5;
+    bool sync = 6;
+}
+
+message SignResponse {
+    string instance_id = 1;
+    optional bytes result = 2;
+}
+
+//------------ Coins ---------------
+message CoinRequest {
+    bytes name = 1;
+    optional string key_id = 2;
+    scheme_types.ThresholdScheme scheme = 3;
+    scheme_types.Group group = 4;
+}
+
+message CoinResponse {
+    string instance_id = 1;
+}
+
+//------------ Status --------------
+message StatusRequest {
+    string instance_id = 1;
+}
+
+message StatusResponse {
+    string instance_id = 1;
+    scheme_types.ThresholdScheme scheme = 2;
+    scheme_types.Group group = 3;
+    bool is_finished = 4;
+    optional bytes result = 5;
+    optional string key_id = 6; // TODO: remove optional as soon as key_ids are implemented
+}
